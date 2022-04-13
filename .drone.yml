@@ -16,6 +16,17 @@ steps:
   image: plugins/gitea-release
   settings:
     files: garden-water.yml
+  when:
+    event: tag
+
+- name: upload
+  image: plugins/s3
+  settings:
+    bucket: drone
+    source: garden-water.yml
+    target: /garden-water/
+    path_style: true
+    endpoint: http://192.168.132.2:9000
 ---
 kind: pipeline
 type: ssh
