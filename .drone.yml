@@ -24,6 +24,10 @@ steps:
   image: plugins/s3
   settings:
     bucket: drone
+    access_key:
+      from_secret: drone_minio_user
+    secret_key:
+      from_secret: drone_minio_pass
     source: garden-water.yml
     target: /garden-water/
     path_style: true
