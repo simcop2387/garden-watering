@@ -11,6 +11,11 @@ steps:
   image: perl
   commands:
   - perl build_config.pl
+
+- name: gitea_release
+  image: plugins/gitea-release
+  settings:
+    files: garden-water.yml
 ---
 kind: pipeline
 type: ssh
