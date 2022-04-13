@@ -12,23 +12,12 @@ steps:
   commands:
   - perl build_config.pl
 ---
-kind: pipeline:
-name: create_release
-
-depends_on:
-  - build
-
-steps:
-- name: gitea_release
-  image: plugins/gitea-release
----
 kind: pipeline
 type: ssh
 name: deploy
 
 depends_on:
   - build
-  - create_release
 
 server:
   host: homeassistant.private.simcop2387.info
