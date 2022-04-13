@@ -7,8 +7,24 @@ platform:
   arch: amd64
 
 steps:
-- name: greeting
-  image: alpine
+- name: build_code
+  image: perl
   commands:
-  - echo hello
-  - echo world
+  - perl build_config.pl
+
+---
+kind: pipeline
+type: ssh
+name: default
+
+server:
+  host: homeassistant.private.simcop2387.info
+  user: esphome_remote
+  password:
+    from_secret:  esphome_remote_pass
+
+steps:
+- name: greeting
+  commands:
+  - echo hello world
+
