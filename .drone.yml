@@ -11,6 +11,15 @@ steps:
   image: perl
   commands:
   - perl build_config.pl
+---
+kind: pipeline:
+name: create release
+
+steps:
+- name: gitea_release
+  image: plugins/gitea-release
+  when:
+    event: commit
 
 ---
 kind: pipeline
