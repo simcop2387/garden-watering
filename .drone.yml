@@ -10,6 +10,7 @@ steps:
 - name: build_code
   image: perl
   commands:
+  - cpanm --installdeps .
   - perl build_config.pl
 
 - name: gitea_release
