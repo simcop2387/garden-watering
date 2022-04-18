@@ -34,7 +34,7 @@ steps:
     endpoint: http://192.168.132.1:9000
 
 - name: push_to_homeass
-  image: busybox
+  image: debian
   secrets: [ha_ssh_key]
   environment: 
     SSH_KEY:
@@ -42,7 +42,7 @@ steps:
   commands:
     - mkdir /root/.ssh && echo "$${SSH_KEY}" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
     - ls -lah /root/.ssh/
-    - ssh root@homeassistant.home.simcop2387.info -p 22222 'ls /mnt/data/supervisor/homeassistant/esphome'
+    - ssh -v root@homeassistant.home.simcop2387.info -p 22222 'ls /mnt/data/supervisor/homeassistant/esphome'
 
 #---
 #kind: pipeline
