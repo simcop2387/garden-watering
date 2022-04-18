@@ -165,7 +165,7 @@ switch:
     id: pump_relay
     pin:
       mcp23xxx: relay_gpio
-      number: <% $gpio_relay_mapping{$pump_mapping->{switch}} %>
+      number: <%= $gpio_relay_mapping{$pump_mapping->{switch}} %>
       mode:
         output: true
       inverted: true
