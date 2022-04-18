@@ -35,6 +35,7 @@ steps:
 
 - name: push_to_homeass
   image: busybox
+  secrets: [drone_homeassistant_ssh_key]
   environment: 
       SSH_KEY:
         from_secret: drone_homeassisstant_ssh_key
