@@ -10,21 +10,21 @@ use Time::Piece;
 my $out_file=path("garden-watering.yaml");
 
 my @pot_mapping = (
-  {switch =>  0, name => "Pot  1", sensor => "0", default_water => 10, max_water => 25},
-  {switch =>  1, name => "Pot  2", sensor => "1", default_water => 10, max_water => 25},
-  {switch =>  2, name => "Pot  3", sensor => "2", default_water => 10, max_water => 25},
-  {switch =>  3, name => "Pot  4", sensor => "3", default_water => 10, max_water => 25},
-  {switch =>  4, name => "Pot  5", sensor => "4", default_water => 10, max_water => 25},
-  {switch =>  5, name => "Pot  6", sensor => "5", default_water => 10, max_water => 25},
-  {switch =>  6, name => "Pot  7", sensor => "6", default_water => 10, max_water => 25},
-  {switch =>  7, name => "Pot  8", sensor => "7", default_water => 10, max_water => 25},
-  {switch =>  8, name => "Pot  9", sensor => "8", default_water => 10, max_water => 25},
-  {switch =>  9, name => "Pot 10", sensor => "9", default_water => 10, max_water => 25},
-  {switch => 10, name => "Pot 11", sensor => "10", default_water => 10, max_water => 25},
-  {switch => 11, name => "Pot 12", sensor => "11", default_water => 10, max_water => 25},
-  {switch => 12, name => "Pot 13", sensor => "12", default_water => 10, max_water => 25},
-  {switch => 13, name => "Pot 14", sensor => "13", default_water => 10, max_water => 25},
-  {switch => 14, name => "Pot 15", sensor => "14", default_water => 10, max_water => 25},
+  {switch =>  0, name => "Pot  1", sensor => "0", default_water => 10, max_water => 25, status => 0},
+  {switch =>  1, name => "Pot  2", sensor => "1", default_water => 10, max_water => 25, status => 1},
+  {switch =>  2, name => "Pot  3", sensor => "2", default_water => 10, max_water => 25, status => 2},
+  {switch =>  3, name => "Pot  4", sensor => "3", default_water => 10, max_water => 25, status => 3},
+  {switch =>  4, name => "Pot  5", sensor => "4", default_water => 10, max_water => 25, status => 4},
+  {switch =>  5, name => "Pot  6", sensor => "5", default_water => 10, max_water => 25, status => 5},
+  {switch =>  6, name => "Pot  7", sensor => "6", default_water => 10, max_water => 25, status => 6},
+  {switch =>  7, name => "Pot  8", sensor => "7", default_water => 10, max_water => 25, status => 7},
+  {switch =>  8, name => "Pot  9", sensor => "8", default_water => 10, max_water => 25, status => 8},
+  {switch =>  9, name => "Pot 10", sensor => "9", default_water => 10, max_water => 25, status => 9},
+  {switch => 10, name => "Pot 11", sensor => "10", default_water => 10, max_water => 25, status => 10},
+  {switch => 11, name => "Pot 12", sensor => "11", default_water => 10, max_water => 25, status => 11},
+  {switch => 12, name => "Pot 13", sensor => "12", default_water => 10, max_water => 25, status => 12},
+  {switch => 13, name => "Pot 14", sensor => "13", default_water => 10, max_water => 25, status => 13},
+  {switch => 14, name => "Pot 15", sensor => "14", default_water => 10, max_water => 25, status => 14},
 );
 
 for my $n (0..$#pot_mapping) {
@@ -105,6 +105,21 @@ __DATA__
 % }
 <% end %>
 
+<% my $enable_gpio = begin %>
+% for my $entry (@$entries) {
+  - platform: gpio
+    name: "<%= $entry->{name} %> enabled"
+    id: pot_<%= $entry->{number} %>_enabled
+    pin:
+      mcp23xxx: status_gpio
+      number: <%= $entry->{status} %>
+      mode:
+        output: false
+	input: true
+      inverted: true
+% }
+<% end %>
+
 ### <%= $build_date %>
 
 esphome:
@@ -141,6 +156,8 @@ i2c:
 mcp23008:
   - id: 'relay_gpio'
     address: 0x20
+  - id: 'status_gpio'
+    address: 0x21
 
 ads1115:
   - address: 0x48
@@ -175,3 +192,4 @@ switch:
 
 binary_sensor:
 <%= $valve_states->() %>
+<%= $enable_gpio->() %>
