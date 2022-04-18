@@ -39,6 +39,7 @@ steps:
   commands:
     - mkdir /root/.ssh && echo "$${drone_homeassistant_ssh_key}" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
     - cat /root/.ssh/id_ed25519
+    - ls -lah /root/.ssh/
 
 #---
 #kind: pipeline
