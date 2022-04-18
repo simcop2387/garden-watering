@@ -24,6 +24,7 @@ steps:
 
 - name: build_code
   image: garden-perl:latest
+  pull: if-not-exists
   commands:
   - cpanm --installdeps .
   - perl build_config.pl
@@ -58,6 +59,7 @@ steps:
 
 - name: push_to_homeass
   image: ssh-runner:latest
+  pull: if-not-exists
   secrets: [ha_ssh_key]
   environment: 
     SSH_KEY:
@@ -68,6 +70,7 @@ steps:
 
 - name: homeass_compile
   image: ssh-runner:latest
+  pull: if-not-exists    
   secrets: [ha_ssh_key]
   environment: 
     SSH_KEY:
