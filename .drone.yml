@@ -64,6 +64,13 @@ steps:
     - mkdir /root/.ssh && echo "$${SSH_KEY}" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
     - ssh -oStrictHostKeyChecking=no root@homeassistant.home.simcop2387.info -p 22222 'docker exec addon_a0d7b954_esphome sh -c "cd /config/esphome/; esphome compile garden-watering.yaml"'
 
+
+volumes:
+- name: dockersock
+  host:
+    path: /var/run/docker.sock
+
+
 #---
 #kind: pipeline
 #type: ssh
