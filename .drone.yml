@@ -20,7 +20,7 @@ steps:
   - name: dockersock
     path: /var/run/docker.sock
   commands:
-  - docker build -t garden-perl:latest ./Dockerfile.perl
+  - docker build -t garden-perl:latest -f ./Dockerfile.perl .
 
 - name: build_code
   image: garden-perl:latest
