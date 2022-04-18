@@ -115,7 +115,7 @@ __DATA__
       number: <%= $entry->{status} %>
       mode:
         output: false
-  input: true
+        input: true
       inverted: true
 % }
 <% end %>
