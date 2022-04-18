@@ -42,7 +42,6 @@ steps:
   commands:
     - mkdir /root/.ssh && echo "$${SSH_KEY}" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
     - ls -lah /root/.ssh/
-    - host homeassistant.home.simcop2387.info
     - ssh root@homeassistant.home.simcop2387.info -p 22222 'ls /mnt/data/supervisor/homeassistant/esphome'
 
 #---
