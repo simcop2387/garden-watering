@@ -7,7 +7,7 @@ use Mojo::Template;
 use Data::Section::Simple qw/get_data_section/;
 use Time::Piece;
 
-my $out_file=path("garden-water.yml");
+my $out_file=path("garden-watering.yaml");
 
 my @pot_mapping = (
   {switch =>  0, name => "Pot  1", sensor => "0", default_water => 10, max_water => 25},
@@ -59,7 +59,7 @@ my $all = get_data_section;
 my $mt = Mojo::Template->new();
 $mt->name("garden-water.yml");
 my $build_date = localtime->datetime();
-my $out = $mt->vars(1)->render($all->{"garden-water.yml"}, {entries => \@pot_mapping, analog_mux_pins => $analog_mux_pins, gpio_relay_map => \%gpio_relay_map, pump_mapping => $pump_mapping, build_date=>$build_date});
+my $out = $mt->vars(1)->render($all->{"garden-watering.yaml"}, {entries => \@pot_mapping, analog_mux_pins => $analog_mux_pins, gpio_relay_map => \%gpio_relay_map, pump_mapping => $pump_mapping, build_date=>$build_date});
 $out_file->spew_utf8($out);
  
 __END__
