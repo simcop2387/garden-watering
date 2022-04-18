@@ -57,14 +57,14 @@ my %gpio_relay_map = (
 
 my $all = get_data_section;
 my $mt = Mojo::Template->new();
-$mt->name("garden-water.yml");
+$mt->name("garden-watering.yaml");
 my $build_date = localtime->datetime();
 my $out = $mt->vars(1)->render($all->{"garden-watering.yaml"}, {entries => \@pot_mapping, analog_mux_pins => $analog_mux_pins, gpio_relay_map => \%gpio_relay_map, pump_mapping => $pump_mapping, build_date=>$build_date});
 $out_file->spew_utf8($out);
  
 __END__
 __DATA__
-@@ garden-water.yml
+@@ garden-watering.yaml
 <% my $valve_states = begin %>
 % for my $entry (@$entries) {
   - platform: template
