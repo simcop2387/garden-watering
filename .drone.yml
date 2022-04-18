@@ -14,8 +14,16 @@ node:
   vlan: priviliged
 
 steps:
+- name: build_docker_perl
+  image: docker
+  volumes:
+  - name: dockersock
+    path: /var/run/docker.sock
+  commands:
+  - docker build -t garden-perl:latest ./Dockerfile.perl
+
 - name: build_code
-  image: perl
+  image: garden-perl:latest
   commands:
   - cpanm --installdeps .
   - perl build_config.pl
