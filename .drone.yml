@@ -32,7 +32,7 @@ steps:
     secret_key:
       from_secret: drone_minio_pass
     source: garden-watering.yaml
-    target: /garden-water/
+    target: /garden-water/garden-watering.yaml
     path_style: true
     endpoint: http://192.168.1.229:9000
 
@@ -45,8 +45,7 @@ steps:
   commands:
     - apt update && apt install -y openssh-client
     - mkdir /root/.ssh && echo "$${SSH_KEY}" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
-    - ls -lah /root/.ssh/
-    - ssh -v -oStrictHostKeyChecking=no root@homeassistant.home.simcop2387.info -p 22222 'ls /mnt/data/supervisor/homeassistant/esphome'
+    - ssh -oStrictHostKeyChecking=no root@homeassistant.home.simcop2387.info -p 22222 'cd /mnt/data/supervisor/homeassistant/esphome; curl http://192.168.1.229:9000/dron '
 
 #---
 #kind: pipeline
