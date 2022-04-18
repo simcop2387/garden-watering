@@ -64,7 +64,7 @@ __END__
 __DATA__
 @@ garden-water.yml
 <% my $valve_states = begin %>
-% for my $entry (@entries) {
+% for my $entry (@$entries) {
   - platform: template
     name: "<%= $entry->{name} %> valve state"
     id: pot_<%= $entry->{number} %>_valve_state
@@ -72,7 +72,7 @@ __DATA__
 <% end %>
 
 <% my $pot_sensor = begin %>
-% for my $entry (@entries) {
+% for my $entry (@$entries) {
   - platform: cd74hc4067
     id: adc_pot_<%= $entry->{number} %>
     name: "<%= $entry->{name} %> soil value"
@@ -82,7 +82,7 @@ __DATA__
 <% end %>
 
 <% my $pot_switch = begin %>
-% for my $entry (@entries) {
+% for my $entry (@$entries) {
   - platform: gpio
     name: "<%= $entry->{name} %> valve"
     id: pot_<%= $entry->{number} %>_valve
@@ -96,7 +96,7 @@ __DATA__
         state: OFF
     pin:
       mcp23xxx: relay_gpio
-      number: <%= $gpio_relay_map{$entry->{switch}} %>
+      number: <%= $gpio_relay_map->{$entry->{switch}} %>
       mode:
         output: true
       inverted: true
@@ -156,8 +156,7 @@ sensor:
     gain: 1.024
     multiplexer: "A0_GND"
     name: "raw adc value for multiplexer"
-
-## TODO pot sensors
+<%= $pot_sensor->() %>
 
 switch:
   - platform: gpio
@@ -165,11 +164,11 @@ switch:
     id: pump_relay
     pin:
       mcp23xxx: relay_gpio
-      number: <%= $gpio_relay_mapping{$pump_mapping->{switch}} %>
+      number: <%= $gpio_relay_map->{$pump_mapping->{switch}} %>
       mode:
         output: true
       inverted: true
+<%= $pot_switch->() %>
 
 binary_sensor:
-## TODO states
-
+<%= $valve_states->() %>
