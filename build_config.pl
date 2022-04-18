@@ -56,12 +56,53 @@ my %gpio_relay_map = (
 
 my $all = get_data_section;
 my $mt = Mojo::Template->new();
+$mt->name("garden-water.yml");
+$mt->vars(1)->render($all->{"garden-water.yml"}, {entries => \@pot_mapping, analog_mux_pins => $analog_mux_pins, gpio_relay_map => \%gpio_relay_map, pump_mapping => $pump_mapping});
 
  
 __END__
 __DATA__
-
 @@ garden-water.yml
+<% my $valve_states = begin %>
+% for my $entry (@entries) {
+  - platform: template
+    name: "<%= $entry->{name} %> valve state"
+    id: pot_<%= $entry->{number} %>_valve_state
+% }
+<% end %>
+
+<% my $pot_sensor = begin %>
+% for my $entry (@entries) {
+  - platform: cd74hc4067
+    id: adc_pot_<%= $entry->{number} %>
+    name: "<%= $entry->{name} %> soil value"
+    number: <%= $entry->{sensor} %>
+    sensor: ads1115_input
+% }
+<% end %>
+
+<% my $pot_switch = begin %>
+% for my $entry (@entries) {
+  - platform: gpio
+    name: "<%= $entry->{name} %> valve"
+    id: pot_<%= $entry->{number} %>_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_<%= $entry->{number} %>_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_<%= $entry->{number} %>_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: <%= $gpio_relay_map{$entry->{switch}} %>
+      mode:
+        output: true
+      inverted: true
+% }
+<% end %>
+
 
 esphome:
   name: garden-watering
@@ -131,43 +172,4 @@ switch:
 
 binary_sensor:
 ## TODO states
-
-@@ pot-sensor.yml
-% for my $entry (@entries) {
-  - platform: cd74hc4067
-    id: adc_pot_<%= $entry->{number} %>
-    name: "<%= $entry->{name} %> soil value"
-    number: <%= $entry->{sensor} %>
-    sensor: ads1115_input
-% }
-
-@@ pot-switch.yml
-% for my $entry (@entries) {
-  - platform: gpio
-    name: "<%= $entry->{name} %> valve"
-    id: pot_<%= $entry->{number} %>_valve
-    on_turn_on:
-    - binary_sensor.template.publish:
-        id: pot_<%= $entry->{number} %>_valve_state
-        state: ON
-    on_turn_off:
-    - binary_sensor.template.publish:
-        id: pot_<%= $entry->{number} %>_valve_state
-        state: OFF
-    pin:
-      mcp23xxx: relay_gpio
-      number: <%= $gpio_relay_map{$entry->{switch}} %>
-      mode:
-        output: true
-      inverted: true
-% }
-
-@@ pot-settings.yml
-
-@@ pot-states.yml
-% for my $entry (@entries) {
-  - platform: template
-    name: "<%= $entry->{name} valve state"
-    id: pot_<%= $entry->{number}_valve_state
-% }
 
