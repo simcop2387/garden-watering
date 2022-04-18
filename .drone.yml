@@ -7,7 +7,7 @@ platform:
   arch: amd64
 
 node:
-  vlan: privileged
+  vlan: priviliged
 
 steps:
 - name: build_code
