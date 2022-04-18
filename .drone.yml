@@ -31,15 +31,15 @@ steps:
   - cpanm --installdeps .
   - perl build_config.pl
 
-- name: gitea_release
-  image: plugins/gitea-release
-  settings:
-    files: garden-watering.yml
-    api_key:
-      from_secret: gitea_api_key
-    base_url: https://gitea.simcop2387.info/
-  when:
-    event: tag
+    #- name: gitea_release
+    #  image: plugins/gitea-release
+    #  settings:
+    #    files: garden-watering.yml
+    #    api_key:
+    #      from_secret: gitea_api_key
+    #    base_url: https://gitea.simcop2387.info/
+    #  when:
+    #    event: tag
 
 - name: build_docker
   image: docker
