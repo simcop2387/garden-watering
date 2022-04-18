@@ -57,8 +57,8 @@ my %gpio_relay_map = (
 my $all = get_data_section;
 my $mt = Mojo::Template->new();
 $mt->name("garden-water.yml");
-$mt->vars(1)->render($all->{"garden-water.yml"}, {entries => \@pot_mapping, analog_mux_pins => $analog_mux_pins, gpio_relay_map => \%gpio_relay_map, pump_mapping => $pump_mapping});
-
+my $out = $mt->vars(1)->render($all->{"garden-water.yml"}, {entries => \@pot_mapping, analog_mux_pins => $analog_mux_pins, gpio_relay_map => \%gpio_relay_map, pump_mapping => $pump_mapping});
+$out_file->spew_utf8($out);
  
 __END__
 __DATA__
