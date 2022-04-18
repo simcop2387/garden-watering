@@ -29,7 +29,7 @@ steps:
   - name: dockersock
     path: /var/run/docker.sock
   commands:
-  - docker build -t ssh-runner:latest
+  - docker build -t ssh-runner:latest .
 
 - name: upload
   image: plugins/s3
