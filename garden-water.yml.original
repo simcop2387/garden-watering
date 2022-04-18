@@ -1,0 +1,489 @@
+esphome:
+  name: garden-watering
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "58e150f3586782f14b2a4d1daa8ff07c"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Garden-Watering Fallback Hotspot"
+    password: "in2eFio6bwID"
+
+captive_portal:
+
+i2c:
+
+
+mcp23008:
+  - id: 'relay_gpio'
+    address: 0x20
+
+ads1115:
+  - address: 0x48
+    id: ext_adc_1
+
+cd74hc4067:
+  - id: cd74hc4067_1
+    pin_s0: 18
+    pin_s1: 17
+    pin_s2: 16
+    pin_s3: 15
+    
+sensor:
+  - platform: ads1115
+    id: ads1115_input
+    ads1115_id: ext_adc_1
+    gain: 1.024
+    multiplexer: "A0_GND"
+    name: "raw adc value for multiplexer"
+
+  - platform: cd74hc4067
+    id: adc_pot_0
+    name: "pot 0 test value"
+    number: 0
+    sensor: ads1115_input
+
+  - platform: cd74hc4067
+    id: adc_pot_1
+    name: "pot 1 test value"
+    number: 1
+    sensor: ads1115_input
+
+  - platform: cd74hc4067
+    id: adc_pot_2
+    name: "pot 2 test value"
+    number: 2
+    sensor: ads1115_input
+
+  - platform: cd74hc4067
+    id: adc_pot_3
+    name: "pot 3 test value"
+    number: 3
+    sensor: ads1115_input
+
+  - platform: cd74hc4067
+    id: adc_pot_4
+    name: "pot 4 test value"
+    number: 4
+    sensor: ads1115_input
+
+  - platform: cd74hc4067
+    id: adc_pot_5
+    name: "pot 5 test value"
+    number: 5
+    sensor: ads1115_input
+
+  - platform: cd74hc4067
+    id: adc_pot_6
+    name: "pot 6 test value"
+    number: 6
+    sensor: ads1115_input
+
+  - platform: cd74hc4067
+    id: adc_pot_7
+    name: "pot 7 test value"
+    number: 7
+    sensor: ads1115_input
+
+  - platform: cd74hc4067
+    id: adc_pot_8
+    name: "pot 8 test value"
+    number: 8
+    sensor: ads1115_input
+
+  - platform: cd74hc4067
+    id: adc_pot_9
+    name: "pot 9 test value"
+    number: 9
+    sensor: ads1115_input
+
+  - platform: cd74hc4067
+    id: adc_pot_10
+    name: "pot 10 test value"
+    number: 10
+    sensor: ads1115_input
+
+  - platform: cd74hc4067
+    id: adc_pot_11
+    name: "pot 11 test value"
+    number: 11
+    sensor: ads1115_input
+
+  - platform: cd74hc4067
+    id: adc_pot_12
+    name: "pot 12 test value"
+    number: 12
+    sensor: ads1115_input
+
+  - platform: cd74hc4067
+    id: adc_pot_13
+    name: "pot 13 test value"
+    number: 13
+    sensor: ads1115_input
+
+  - platform: cd74hc4067
+    id: adc_pot_14
+    name: "pot 14 test value"
+    number: 14
+    sensor: ads1115_input
+
+    
+
+switch:
+  - platform: gpio
+    name: "Pump Relay"
+    id: pump_relay
+    pin:
+      mcp23xxx: relay_gpio
+      number: 15
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_0_valve"
+    id: pot_0_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_0_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_0_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 0
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_1_valve"
+    id: pot_1_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_1_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_1_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 1
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_2_valve"
+    id: pot_2_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_2_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_2_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 2
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_3_valve"
+    id: pot_3_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_3_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_3_valve_state
+        sate: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 3
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_4_valve"
+    id: pot_4_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_4_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_4_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 4
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_5_valve"
+    id: pot_5_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_5_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_5_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 5
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_6_valve"
+    id: pot_6_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_6_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_6_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 6
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_7_valve"
+    id: pot_7_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_7_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_7_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 7
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_8_valve"
+    id: pot_8_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_8_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_8_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 8
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_9_valve"
+    id: pot_9_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_9_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_9_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 9
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_10_valve"
+    id: pot_10_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_10_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_10_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 10
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_11_valve"
+    id: pot_11_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_11_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_11_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 11
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_12_valve"
+    id: pot_12_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_12_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_12_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 12
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_13_valve"
+    id: pot_13_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_13_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_13_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 13
+      mode:
+        output: true
+      inverted: true
+
+  - platform: gpio
+    name: "pot_14_valve"
+    id: pot_14_valve
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_14_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_14_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: 14
+      mode:
+        output: true
+      inverted: true
+
+binary_sensor:
+  - platform: template
+    name: "Pot 0 vavle state"
+    id: pot_0_valve_state
+
+  - platform: template
+    name: "Pot 1 vavle state"
+    id: pot_1_valve_state
+
+  - platform: template
+    name: "Pot 2 vavle state"
+    id: pot_2_valve_state
+
+  - platform: template
+    name: "Pot 3 vavle state"
+    id: pot_3_valve_state
+
+  - platform: template
+    name: "Pot 4 vavle state"
+    id: pot_4_valve_state
+
+  - platform: template
+    name: "Pot 5 vavle state"
+    id: pot_5_valve_state
+
+  - platform: template
+    name: "Pot 6 vavle state"
+    id: pot_6_valve_state
+
+  - platform: template
+    name: "Pot 7 vavle state"
+    id: pot_7_valve_state
+
+  - platform: template
+    name: "Pot 8 vavle state"
+    id: pot_8_valve_state
+
+  - platform: template
+    name: "Pot 9 vavle state"
+    id: pot_9_valve_state
+
+  - platform: template
+    name: "Pot 10 vavle state"
+    id: pot_10_valve_state
+
+  - platform: template
+    name: "Pot 11 vavle state"
+    id: pot_11_valve_state
+
+  - platform: template
+    name: "Pot 12 vavle state"
+    id: pot_12_valve_state
+
+  - platform: template
+    name: "Pot 13 vavle state"
+    id: pot_13_valve_state
+
+  - platform: template
+    name: "Pot 14 vavle state"
+    id: pot_14_valve_state
+
+t
