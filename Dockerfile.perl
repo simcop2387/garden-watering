@@ -1,4 +1,4 @@
 FROM perl:latest
 
-COPY cpanfile
+COPY cpanfile cpanfile
 RUN cpanm --verbose --installdeps .
