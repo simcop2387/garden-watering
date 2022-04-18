@@ -5,6 +5,7 @@ use warnings;
 use Path::Tiny;
 use Mojo::Template;
 use Data::Section::Simple qw/get_data_section/;
+use Time::Piece;
 
 my $out_file=path("garden-water.yml");
 
@@ -57,7 +58,8 @@ my %gpio_relay_map = (
 my $all = get_data_section;
 my $mt = Mojo::Template->new();
 $mt->name("garden-water.yml");
-my $out = $mt->vars(1)->render($all->{"garden-water.yml"}, {entries => \@pot_mapping, analog_mux_pins => $analog_mux_pins, gpio_relay_map => \%gpio_relay_map, pump_mapping => $pump_mapping});
+my $build_date = localtime->datetime();
+my $out = $mt->vars(1)->render($all->{"garden-water.yml"}, {entries => \@pot_mapping, analog_mux_pins => $analog_mux_pins, gpio_relay_map => \%gpio_relay_map, pump_mapping => $pump_mapping, build_date=>$build_date});
 $out_file->spew_utf8($out);
  
 __END__
@@ -103,6 +105,7 @@ __DATA__
 % }
 <% end %>
 
+### <%= $build_date %>
 
 esphome:
   name: garden-watering
