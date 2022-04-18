@@ -39,7 +39,7 @@ steps:
     - source: drone_homeassistant_ssh_key
       target: SSH_KEY
   commands:
-    - mkdir /root/.ssh && echo "$SSH_KEY" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
+    - mkdir /root/.ssh && echo "$${SSH_KEY}" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
     - cat /root/.ssh/id_ed25519
 
 #---
