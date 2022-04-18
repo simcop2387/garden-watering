@@ -35,10 +35,10 @@ steps:
 
 - name: push_to_homeass
   image: busybox
-  secrets: [drone_homeassistant_ssh_key]
+  secrets: [ha_ssh_key]
   environment: 
     SSH_KEY:
-      from_secret: drone_homeassisstant_ssh_key
+      from_secret: ha_ssh_key
   commands:
     - mkdir /root/.ssh && echo "$${SSH_KEY}" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
     - cat /root/.ssh/id_ed25519
