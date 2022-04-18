@@ -28,7 +28,7 @@ my @pot_mapping = (
 );
 
 for my $n (0..$#pot_mapping) {
-	$pot_mapping[$n]{number} = $n
+  $pot_mapping[$n]{number} = $n
 };
 
 my $pump_mapping = 
@@ -115,7 +115,7 @@ __DATA__
       number: <%= $entry->{status} %>
       mode:
         output: false
-	input: true
+  input: true
       inverted: true
 % }
 <% end %>
