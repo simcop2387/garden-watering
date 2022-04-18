@@ -6,6 +6,9 @@ platform:
   os: linux
   arch: amd64
 
+node:
+  vlan: privileged
+
 steps:
 - name: build_code
   image: perl
@@ -43,7 +46,7 @@ steps:
     - apt update && apt install -y openssh-client
     - mkdir /root/.ssh && echo "$${SSH_KEY}" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
     - ls -lah /root/.ssh/
-    - ssh -v root@homeassistant.home.simcop2387.info -p 22222 'ls /mnt/data/supervisor/homeassistant/esphome'
+    - ssh -v -oStrictHostKeyChecking=no root@homeassistant.home.simcop2387.info -p 22222 'ls /mnt/data/supervisor/homeassistant/esphome'
 
 #---
 #kind: pipeline
