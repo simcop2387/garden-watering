@@ -16,7 +16,7 @@ steps:
 - name: gitea_release
   image: plugins/gitea-release
   settings:
-    files: garden-water.yml
+    files: garden-watering.yml
   when:
     event: tag
 
@@ -28,26 +28,36 @@ steps:
       from_secret: drone_minio_user
     secret_key:
       from_secret: drone_minio_pass
-    source: garden-water.yml
+    source: garden-watering.yml
     target: /garden-water/
     path_style: true
     endpoint: http://192.168.132.1:9000
----
-kind: pipeline
-type: ssh
-name: deploy
 
-depends_on:
-  - build
-
-server:
-  host: homeassistant.private.simcop2387.info
-  user: esphome_remote
-  password:
-    from_secret:  esphome_remote_pass
-
-steps:
-- name: greeting
+- name: push_to_homeass
+  image: busybox
+  environment:
+    - SSH_KEY:
+        from_secret: drone_homeassistant_ssh_key
   commands:
-  - echo hello world
+    - mkdir /root/.ssh && echo "$SSH_KEY" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
+    - cat /root/.ssh/id_ed25519
+
+#---
+#kind: pipeline
+#type: ssh
+#name: deploy
+#
+#depends_on:
+#  - build
+#
+#server:
+#  host: homeassistant.private.simcop2387.info
+#  user: esphome_remote
+#  password:
+#    from_secret:  esphome_remote_pass
+#
+#steps:
+#- name: greeting
+#  commands:
+#  - echo hello world
 
