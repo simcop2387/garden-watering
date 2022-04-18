@@ -1,3 +1,3 @@
-FROM debian-slim:latest
+FROM debian:slim
 
 RUN apt update && apt install openssh-client
