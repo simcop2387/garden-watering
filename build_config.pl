@@ -7,7 +7,9 @@ use Mojo::Template;
 use Data::Section::Simple qw/get_data_section/;
 use Time::Piece;
 
-my $out_file=path("garden-watering.yaml");
+my $out_path=path("dist");
+$out_path->mkdir();
+my $out_file=$out_path->child("garden-watering.yaml");
 
 my @pot_mapping = (
   {switch =>  0, name => "Pot  1", sensor => "0", default_water => 10, max_water => 25, status => 0},

@@ -28,18 +28,28 @@ steps:
   image: garden-perl:latest
   pull: if-not-exists
   commands:
-  - cpanm --installdeps .
   - perl build_config.pl
+  - tar -c dist/* -vzf garden-watering.tar.gz
 
 - name: gitea_release
   image: plugins/gitea-release
   settings:
-    files: garden-watering.yaml
+    files: garden-watering.tar.gz
     api_key:
       from_secret: gitea_api_key
     base_url: https://gitea.simcop2387.info/
   when:
     event: tag
+
+# - name: publish
+#   image: plugins/github-release
+#   settings:
+#     file_exists: skip
+#     api_key:
+#       from_secret: github_api_key
+#     files: garden-watering.tar.gz
+#   when:
+#     event: tag
 
 - name: build_docker
   image: docker
@@ -58,6 +68,19 @@ steps:
     secret_key:
       from_secret: drone_minio_pass
     source: garden-watering.yaml
+    target: /garden-water/
+    path_style: true
+    endpoint: http://192.168.1.229:9000
+
+- name: upload tarball
+  image: plugins/s3
+  settings:
+    bucket: drone
+    access_key:
+      from_secret: drone_minio_user
+    secret_key:
+      from_secret: drone_minio_pass
+    source: garden-watering.tar.gz
     target: /garden-water/
     path_style: true
     endpoint: http://192.168.1.229:9000
