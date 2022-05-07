@@ -191,6 +191,7 @@ switch:
   - platform: gpio
     name: "<%= $pump_mapping->{name} %>"
     id: pump_relay
+    restore_mode: ALWAYS_OFF
     pin:
       mcp23xxx: relay_gpio
       number: <%= $gpio_relay_map->{$pump_mapping->{switch}} %>
