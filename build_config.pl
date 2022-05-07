@@ -8,7 +8,7 @@ use Data::Section::Simple qw/get_data_section/;
 use Time::Piece;
 
 my $out_path=path("dist");
-$out_path->mkdir();
+$out_path->mkpath();
 my $out_file=$out_path->child("garden-watering.yaml");
 
 my @pot_mapping = (
@@ -36,7 +36,7 @@ for my $n (0..$#pot_mapping) {
 my $pump_mapping = 
   {switch => 15, name => "Pump Relay"};
 
-my $analog_mux_pins = [qw/18 17 16 15/];
+my $analog_mux_pins = [qw/19 18 17 16/];
 
 my %gpio_relay_map = (
  0 => 0,
@@ -51,10 +51,10 @@ my %gpio_relay_map = (
  9 => 9,
  10 => 10,
  11 => 11,
- 12 => 12,
+ 12 => 15,
  13 => 13,
  14 => 14,
- 15 => 15
+ 15 => 12
 );
 
 my $all = get_data_section;
@@ -86,10 +86,17 @@ __DATA__
 <% end %>
 
 <% my $pot_switch = begin %>
-% for my $entry (@$entries) {
+<% my $first = 1; %>
+<% for my $entry (@$entries) {%>
   - platform: gpio
     name: "<%= $entry->{name} %> valve"
     id: pot_<%= $entry->{number} %>_valve
+    restore_mode: ALWAYS_OFF
+    <% if ($first) { %>
+    interlock: &valve_interlock [<%= join ', ', map {"pot_".$_->{number}."_valve"} @$entries %>]
+    <% $first = 0; } else { %>
+    interlock: *valve_interlock
+    <% } %>
     on_turn_on:
     - binary_sensor.template.publish:
         id: pot_<%= $entry->{number} %>_valve_state
@@ -104,11 +111,11 @@ __DATA__
       mode:
         output: true
       inverted: true
-% }
+<% } %>
 <% end %>
 
 <% my $enable_gpio = begin %>
-% for my $entry (@$entries) {
+<% for my $entry (@$entries) { %>
   - platform: gpio
     name: "<%= $entry->{name} %> enabled"
     id: pot_<%= $entry->{number} %>_enabled
@@ -119,7 +126,7 @@ __DATA__
         output: false
         input: true
       inverted: true
-% }
+<% } %>
 <% end %>
 
 ### <%= $build_date %>
