@@ -162,7 +162,7 @@ captive_portal:
 i2c:
 
 
-mcp23008:
+mcp23017:
   - id: 'relay_gpio'
     address: 0x20
   - id: 'status_gpio'
