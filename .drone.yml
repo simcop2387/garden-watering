@@ -67,7 +67,7 @@ steps:
       from_secret: drone_minio_user
     secret_key:
       from_secret: drone_minio_pass
-    source: garden-watering.yaml
+    source: dist/garden-watering.yaml
     target: /garden-water/
     path_style: true
     endpoint: http://192.168.1.229:9000
