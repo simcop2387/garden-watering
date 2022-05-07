@@ -12,21 +12,21 @@ $out_path->mkpath();
 my $out_file=$out_path->child("garden-watering.yaml");
 
 my @pot_mapping = (
-  {switch =>  0, name => "Pot  1", sensor => "0", default_water => 10, max_water => 25, status => 0},
-  {switch =>  1, name => "Pot  2", sensor => "1", default_water => 10, max_water => 25, status => 1},
-  {switch =>  2, name => "Pot  3", sensor => "2", default_water => 10, max_water => 25, status => 2},
-  {switch =>  3, name => "Pot  4", sensor => "3", default_water => 10, max_water => 25, status => 3},
-  {switch =>  4, name => "Pot  5", sensor => "4", default_water => 10, max_water => 25, status => 4},
-  {switch =>  5, name => "Pot  6", sensor => "5", default_water => 10, max_water => 25, status => 5},
-  {switch =>  6, name => "Pot  7", sensor => "6", default_water => 10, max_water => 25, status => 6},
-  {switch =>  7, name => "Pot  8", sensor => "7", default_water => 10, max_water => 25, status => 7},
-  {switch =>  8, name => "Pot  9", sensor => "8", default_water => 10, max_water => 25, status => 8},
-  {switch =>  9, name => "Pot 10", sensor => "9", default_water => 10, max_water => 25, status => 9},
-  {switch => 10, name => "Pot 11", sensor => "10", default_water => 10, max_water => 25, status => 10},
-  {switch => 11, name => "Pot 12", sensor => "11", default_water => 10, max_water => 25, status => 11},
-  {switch => 12, name => "Pot 13", sensor => "12", default_water => 10, max_water => 25, status => 12},
-  {switch => 13, name => "Pot 14", sensor => "13", default_water => 10, max_water => 25, status => 13},
-  {switch => 14, name => "Pot 15", sensor => "14", default_water => 10, max_water => 25, status => 14},
+  {switch =>  1, name => "Pot  1", sensor => "0", default_water => 10, max_water => 25, status => 0},
+  {switch =>  2, name => "Pot  2", sensor => "1", default_water => 10, max_water => 25, status => 1},
+  {switch =>  3, name => "Pot  3", sensor => "2", default_water => 10, max_water => 25, status => 2},
+  {switch =>  4, name => "Pot  4", sensor => "3", default_water => 10, max_water => 25, status => 3},
+  {switch =>  5, name => "Pot  5", sensor => "4", default_water => 10, max_water => 25, status => 4},
+  {switch =>  6, name => "Pot  6", sensor => "5", default_water => 10, max_water => 25, status => 5},
+  {switch =>  7, name => "Pot  7", sensor => "6", default_water => 10, max_water => 25, status => 6},
+  {switch =>  8, name => "Pot  8", sensor => "7", default_water => 10, max_water => 25, status => 7},
+  {switch =>  9, name => "Pot  9", sensor => "8", default_water => 10, max_water => 25, status => 8},
+  {switch => 10, name => "Pot 10", sensor => "9", default_water => 10, max_water => 25, status => 9},
+  {switch => 11, name => "Pot 11", sensor => "10", default_water => 10, max_water => 25, status => 10},
+  {switch => 12, name => "Pot 12", sensor => "11", default_water => 10, max_water => 25, status => 11},
+  {switch => 13, name => "Pot 13", sensor => "12", default_water => 10, max_water => 25, status => 12},
+  {switch => 14, name => "Pot 14", sensor => "13", default_water => 10, max_water => 25, status => 13},
+  {switch => 15, name => "Pot 15", sensor => "14", default_water => 10, max_water => 25, status => 14},
 );
 
 for my $n (0..$#pot_mapping) {
@@ -34,27 +34,27 @@ for my $n (0..$#pot_mapping) {
 };
 
 my $pump_mapping = 
-  {switch => 15, name => "Pump Relay"};
+  {switch => 0, name => "Pump Relay"};
 
 my $analog_mux_pins = [qw/19 18 17 16/];
 
 my %gpio_relay_map = (
- 0 => 0,
- 1 => 1,
- 2 => 2,
- 3 => 3,
- 4 => 4,
- 5 => 5,
- 6 => 6,
- 7 => 7,
- 8 => 8,
- 9 => 9,
- 10 => 10,
- 11 => 11,
- 12 => 15,
+ 0 => 12,
+ 1 => 0,
+ 2 => 1,
+ 3 => 2,
+ 4 => 3,
+ 5 => 4,
+ 6 => 5,
+ 7 => 6,
+ 8 => 7,
+ 9 => 8,
+ 10 => 9,
+ 11 => 10,
+ 12 => 11,
  13 => 13,
  14 => 14,
- 15 => 12
+ 15 => 15
 );
 
 my $all = get_data_section;
