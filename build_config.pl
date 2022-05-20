@@ -36,7 +36,7 @@ for my $n (0..$#pot_mapping) {
 my $pump_mapping = 
   {switch => 0, name => "Pump Relay"};
 
-my $analog_mux_pins = [qw/19 18 17 16/];
+my $analog_mux_pins = [qw/GPIO27 GPIO26 GPIO25 GPIO33/];
 
 my %gpio_relay_map = (
  0 => 4,
@@ -182,9 +182,28 @@ sensor:
   - platform: ads1115
     id: ads1115_input
     ads1115_id: ext_adc_1
-    gain: 1.024
+    gain: 6.144
     multiplexer: "A0_GND"
-    name: "raw adc value for multiplexer"
+    name: "raw adc value for multiplexer a0"
+  - platform: ads1115
+    id: ads1115_input_1
+    ads1115_id: ext_adc_1
+    gain: 6.144
+    multiplexer: "A1_GND"
+    name: "raw adc value for multiplexer a1"
+  - platform: ads1115
+    id: ads1115_input_2
+    ads1115_id: ext_adc_1
+    gain: 6.144
+    multiplexer: "A2_GND"
+    name: "raw adc value for multiplexer a2"
+  - platform: ads1115
+    id: ads1115_input_3
+    ads1115_id: ext_adc_1
+    gain: 6.144
+    multiplexer: "A3_GND"
+    name: "raw adc value for multiplexer a3"
+    
 <%= $pot_sensor->() %>
 
 switch:
