@@ -27,6 +27,7 @@ my @pot_mapping = (
   {switch => 13, name => "Pot 13", sensor => "12", default_water => 10, max_water => 25, status => 12},
   {switch => 14, name => "Pot 14", sensor => "13", default_water => 10, max_water => 25, status => 13},
   {switch => 15, name => "Pot 15", sensor => "14", default_water => 10, max_water => 25, status => 14},
+  {switch => 0, name => "Pot 16", sensor => "15", default_water => 10, max_water => 25, status => 14}, # not a real switch on there
 );
 
 for my $n (0..$#pot_mapping) {
