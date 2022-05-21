@@ -38,8 +38,8 @@ my $pump_mapping =
 
 my $analog_mux_pins = [qw/GPIO27 GPIO26 GPIO25 GPIO33/];
 
-my $float_sensors = [qw/GPIO36 GPIO39/];
-my $water_sensor  = 'GPIO34';
+my $float_sensors = {low_pin => 'GPIO36', high_pin=>'GPIO39'};
+my $water_sensor  = {pin => 'GPIO34', interval => '500ms', factor => 1.0, total_factor=> 1.0};
 
 my %gpio_relay_map = (
  0 => 4,
@@ -64,7 +64,7 @@ my $all = get_data_section;
 my $mt = Mojo::Template->new();
 $mt->name("garden-watering.yaml");
 my $build_date = localtime->datetime();
-my $out = $mt->vars(1)->render($all->{"garden-watering.yaml"}, {entries => \@pot_mapping, analog_mux_pins => $analog_mux_pins, gpio_relay_map => \%gpio_relay_map, pump_mapping => $pump_mapping, build_date=>$build_date});
+my $out = $mt->vars(1)->render($all->{"garden-watering.yaml"}, {entries => \@pot_mapping, analog_mux_pins => $analog_mux_pins, gpio_relay_map => \%gpio_relay_map, pump_mapping => $pump_mapping, build_date=>$build_date, float_sensors => $float_sensors, water_sensor=>$water_sensor});
 $out_file->spew_utf8($out);
  
 __END__
@@ -182,6 +182,19 @@ cd74hc4067:
 % }
 
 sensor:
+  - platform: pulse_counter
+    pin: <%= $water_sensor->{pin} %>
+    update_interval: <%= $water_sensor->{interval} %>
+    id: water_pulse
+    name: "water pulse counter"
+    unit_of_measure: "mL/s"
+    filters:
+      - multiply: <%= $water_sensor->{factor} %>
+    total:
+      unit_of_measure: "mL"
+      name: "Water dispensed"
+      filters:
+        - multiply: <%= $water_sensor->{total_factor} %>
   - platform: ads1115
     id: ads1115_input
     ads1115_id: ext_adc_1
@@ -223,5 +236,27 @@ switch:
 <%= $pot_switch->() %>
 
 binary_sensor:
+  - platform: gpio
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+    name: bucket level low
+    pin:
+      number: <%= $float_sensors->{low_pin} %>
+      mode:
+        input: true
+        pullup: true
+
+  - platform: gpio
+    name: bucket level high
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
+    pin:
+      number: <%= $float_sensors->{high_pin} %>
+      mode:
+        input: true
+        pullup: true
+
 <%= $valve_states->() %>
 <%= $enable_gpio->() %>
