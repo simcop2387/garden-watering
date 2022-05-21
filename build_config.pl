@@ -86,7 +86,7 @@ __DATA__
     name: "<%= $entry->{name} %> soil value"
     number: <%= $entry->{sensor} %>
     sensor: ads1115_input
-    update_interval: 5s
+    update_interval: 15s
 % }
 <% end %>
 
@@ -179,6 +179,7 @@ ads1115:
 
 cd74hc4067:
   - id: cd74hc4067_1
+    delay: 30ms
 % for my $n (0..3) {
     pin_s<%= $n %>: <%= $analog_mux_pins->[$n] %>
 % }
@@ -203,28 +204,28 @@ sensor:
     gain: 6.144
     multiplexer: "A0_GND"
     name: "raw adc value for multiplexer a0"
-    update_interval: 5s
+    update_interval: 15s
   - platform: ads1115
     id: ads1115_input_1
     ads1115_id: ext_adc_1
     gain: 6.144
     multiplexer: "A1_GND"
     name: "raw adc value for multiplexer a1"
-    update_interval: 5s
+    update_interval: 15s
   - platform: ads1115
     id: ads1115_input_2
     ads1115_id: ext_adc_1
     gain: 6.144
     multiplexer: "A2_GND"
     name: "raw adc value for multiplexer a2"
-    update_interval: 5s
+    update_interval: 15s
   - platform: ads1115
     id: ads1115_input_3
     ads1115_id: ext_adc_1
     gain: 6.144
     multiplexer: "A3_GND"
     name: "raw adc value for multiplexer a3"
-    update_interval: 5s
+    update_interval: 15s
     
 <%= $pot_sensor->() %>
 
