@@ -187,11 +187,11 @@ sensor:
     update_interval: <%= $water_sensor->{interval} %>
     id: water_pulse
     name: "water pulse counter"
-    unit_of_measure: "mL/s"
+    unit_of_measurement: "mL/s"
     filters:
       - multiply: <%= $water_sensor->{factor} %>
     total:
-      unit_of_measure: "mL"
+      unit_of_measurement: "mL"
       name: "Water dispensed"
       filters:
         - multiply: <%= $water_sensor->{total_factor} %>
