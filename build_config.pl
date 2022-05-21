@@ -38,8 +38,8 @@ my $pump_mapping =
 
 my $analog_mux_pins = [qw/GPIO27 GPIO26 GPIO25 GPIO33/];
 
-my $float_sensors = {low_pin => 'GPIO36', high_pin=>'GPIO39'};
-my $water_sensor  = {pin => 'GPIO34', interval => '500ms', factor => 1.0, total_factor=> 1.0};
+my $float_sensors = {low_pin => 'GPIO35', high_pin=>'GPIO34'};
+my $water_sensor  = {pin => 'GPIO39', interval => '500ms', factor => 1.0, total_factor=> 1.0};
 
 my %gpio_relay_map = (
  0 => 4,
