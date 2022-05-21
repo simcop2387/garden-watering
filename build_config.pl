@@ -245,7 +245,7 @@ binary_sensor:
       number: <%= $float_sensors->{low_pin} %>
       mode:
         input: true
-        pullup: true
+        pullup: false
 
   - platform: gpio
     name: bucket level high
@@ -256,7 +256,7 @@ binary_sensor:
       number: <%= $float_sensors->{high_pin} %>
       mode:
         input: true
-        pullup: true
+        pullup: false
 
 <%= $valve_states->() %>
 <%= $enable_gpio->() %>
