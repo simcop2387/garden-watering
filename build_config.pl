@@ -88,7 +88,7 @@ __DATA__
     sensor: ads1115_input
     update_interval: 30s
     force_update: true
-    unit_of_measure: "V"
+    unit_of_measurement: "V"
 % }
 <% end %>
 
