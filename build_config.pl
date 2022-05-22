@@ -86,7 +86,7 @@ __DATA__
     name: "<%= $entry->{name} %> soil value"
     number: <%= $entry->{sensor} %>
     sensor: ads1115_input
-    update_interval: 5s
+    update_interval: 30s
 % }
 <% end %>
 
@@ -179,7 +179,7 @@ ads1115:
 
 cd74hc4067:
   - id: cd74hc4067_1
-  #    delay: 30ms
+    delay: 15ms
 % for my $n (0..3) {
     pin_s<%= $n %>: <%= $analog_mux_pins->[$n] %>
 % }
