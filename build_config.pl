@@ -87,6 +87,8 @@ __DATA__
     number: <%= $entry->{sensor} %>
     sensor: ads1115_input
     update_interval: 30s
+    force_update: true
+    unit_of_measure: "V"
 % }
 <% end %>
 
