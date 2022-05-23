@@ -127,8 +127,15 @@ steps:
       from_secret: discord_webhook_id
     webhook_token:
       from_secret: discord_webhook_token
+- name: discord notification
+  image: appleboy/drone-discord
+  settings:
+    webhook_id:
+      from_secret: discord_webhook_id
+    webhook_token:
+      from_secret: discord_webhook_token
     message: >
-      build (\#{{build.number}})[{{ build.link }}] "{{ build.message }}"
+      build \#{{build.number}})
       {{#success build.status}}
         succeeded. Good job.
       {{else}}
