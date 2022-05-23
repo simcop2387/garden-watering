@@ -91,6 +91,7 @@ __DATA__
     #    set_action:
     restore_value: false
     initial_value: 0
+    disabled_by_default: true
   - platform: template
     name: "<%= $entry->{name} %> water received
     id: pot_<%= $entry->{number} %>_water_received
@@ -98,6 +99,7 @@ __DATA__
     #    set_action:
     restore_value: false
     initial_value: 0
+    disabled_by_default: true
 % }
 <% end %>
 
@@ -127,6 +129,7 @@ __DATA__
 <% my $first = 1; %>
 <% for my $entry (@$entries) {%>
   - platform: gpio
+    disabled_by_default: true
     name: "<%= $entry->{name} %> valve"
     id: pot_<%= $entry->{number} %>_valve
     restore_mode: ALWAYS_OFF
@@ -148,21 +151,6 @@ __DATA__
       number: <%= $gpio_relay_map->{$entry->{switch}} %>
       mode:
         output: true
-      inverted: true
-<% } %>
-<% end %>
-
-<% my $enable_gpio = begin %>
-<% for my $entry (@$entries) { %>
-  - platform: gpio
-    name: "<%= $entry->{name} %> enabled"
-    id: pot_<%= $entry->{number} %>_enabled
-    pin:
-      mcp23xxx: status_gpio
-      number: <%= $entry->{status} %>
-      mode:
-        output: false
-        input: true
       inverted: true
 <% } %>
 <% end %>
@@ -295,4 +283,3 @@ binary_sensor:
         pullup: false
 
 <%= $valve_states->() %>
-<%= $enable_gpio->() %>
