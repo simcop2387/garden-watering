@@ -9,7 +9,6 @@ use Time::Piece;
 
 my $out_path=path("dist");
 $out_path->mkpath();
-my $out_file=$out_path->child("garden-watering.yaml");
 
 my @pot_mapping = (
   {switch =>  1, name => "Pot  1", sensor => "0", default_water => 10, max_water => 25, status => 0},
@@ -63,14 +62,45 @@ my %gpio_relay_map = (
 
 my $all = get_data_section;
 my $mt = Mojo::Template->new();
-$mt->name("garden-watering.yaml");
-my $build_date = localtime->datetime();
-my $out = $mt->vars(1)->render($all->{"garden-watering.yaml"}, {entries => \@pot_mapping, analog_mux_pins => $analog_mux_pins, gpio_relay_map => \%gpio_relay_map, pump_mapping => $pump_mapping, build_date=>$build_date, float_sensors => $float_sensors, water_sensor=>$water_sensor});
-$out_file->spew_utf8($out);
+
+my @files = qw/garden-watering.yaml/;
+
+for my $file (@files) {
+  $mt->name($file);
+  my $build_date = localtime->datetime();
+  my $out_file=$out_path->child($file);
+  my $out = $mt->vars(1)->render($all->{$file}, {entries => \@pot_mapping, analog_mux_pins => $analog_mux_pins, gpio_relay_map => \%gpio_relay_map, pump_mapping => $pump_mapping, build_date=>$build_date, float_sensors => $float_sensors, water_sensor=>$water_sensor});
+  $out_file->spew_utf8($out);
+}
+
  
 __END__
 __DATA__
 @@ garden-watering.yaml
+<% my $on_boot_load_mqtt = begin %>
+<% end %>
+
+<% my $numbers = begin %>
+% for my $entry (@$entries) {
+  - platform: template
+    name: "<%= $entry->{name} %> water needed
+    id: pot_<%= $entry->{number} %>_water_needed
+    # in mL
+    min_value: 0
+    max_value: 100
+    #    set_action:
+    restore_value: false
+    initial_value: 0
+  - platform: template
+    name: "<%= $entry->{name} %> water received
+    id: pot_<%= $entry->{number} %>_water_received
+    # in mL
+    #    set_action:
+    restore_value: false
+    initial_value: 0
+% }
+<% end %>
+
 <% my $valve_states = begin %>
 % for my $entry (@$entries) {
   - platform: template
@@ -88,6 +118,7 @@ __DATA__
     sensor: ads1115_input
     update_interval: 30s
     force_update: true
+    accuracy_decimals: 5
     unit_of_measurement: "V"
 % }
 <% end %>
@@ -203,25 +234,25 @@ sensor:
   - platform: ads1115
     id: ads1115_input
     ads1115_id: ext_adc_1
-    gain: 6.144
+    gain: 4.096
     multiplexer: "A0_GND"
     name: "raw adc value for multiplexer a0"
   - platform: ads1115
     id: ads1115_input_1
     ads1115_id: ext_adc_1
-    gain: 6.144
+    gain: 4.096
     multiplexer: "A1_GND"
     name: "raw adc value for multiplexer a1"
   - platform: ads1115
     id: ads1115_input_2
     ads1115_id: ext_adc_1
-    gain: 6.144
+    gain: 4.096
     multiplexer: "A2_GND"
     name: "raw adc value for multiplexer a2"
   - platform: ads1115
     id: ads1115_input_3
     ads1115_id: ext_adc_1
-    gain: 6.144
+    gain: 4.096
     multiplexer: "A3_GND"
     name: "raw adc value for multiplexer a3"
     
