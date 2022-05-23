@@ -127,7 +127,7 @@ steps:
       from_secret: discord_webhook_id
     webhook_token:
       from_secret: discord_webhook_token
-- name: discord notification
+- name: discord notification2
   image: appleboy/drone-discord
   settings:
     webhook_id:
