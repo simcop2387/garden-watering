@@ -128,10 +128,11 @@ steps:
     webhook_token:
       from_secret: discord_webhook_token
     message: >
+      build (\#{{build.number}})[{{ build.link }}] "{{ build.message }}"
       {{#success build.status}}
-        build {{build.number}} succeeded. Good job.
+        succeeded. Good job.
       {{else}}
-        build {{build.number}} failed. Fix me please.
+        failed. Fix me please.
       {{/success}}
 
 
