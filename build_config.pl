@@ -283,3 +283,6 @@ binary_sensor:
         pullup: false
 
 <%= $valve_states->() %>
+
+number:
+<%= $numbers->() %>
