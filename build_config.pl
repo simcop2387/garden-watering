@@ -322,7 +322,6 @@ number:
     max_value: 3.0
     optimistic: true
     disabled_by_default: true
-    optimistic: true
   - platform: template
     name: "<%= $entry->{name} %> calibration min"
     id: pot_<%= $entry->{number} %>_cal_min
@@ -333,7 +332,6 @@ number:
     max_value: 3.0
     optimistic: true
     disabled_by_default: true
-    optimistic: true
   - platform: template
     name: "<%= $entry->{name} %> target threshold"
     id: pot_<%= $entry->{number} %>_target
@@ -344,7 +342,6 @@ number:
     optimistic: true
     initial_value: 2.0 # good default?
     disabled_by_default: true
-    optimistic: true
   - platform: template
     name: "<%= $entry->{name} %> alert threshold"
     id: pot_<%= $entry->{number} %>_water_received
