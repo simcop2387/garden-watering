@@ -150,17 +150,17 @@ sensor:
       auto veml7700 = new VEML7700CustomSensor();
       App.register_component(veml7700);
       return {veml7700, veml7700->lux_sensor, veml7700->white_sensor, veml7700->als_sensor};
-      sensors:
-        - name: "VEML7700 Light" # Required dummy sensor
-        - name: "VEML770 Lux"
-            unit_of_measurement: Lux
-            accuracy_decimals: 0
-        - name: "VEML770 White"
-            unit_of_measurement: raw
-            accuracy_decimals: 0
-        - name: "VEML770 ALS"
-            unit_of_measurement: raw
-            accuracy_decimals: 0
+    sensors:
+      - name: "VEML7700 Light" # Required dummy sensor
+      - name: "VEML770 Lux"
+          unit_of_measurement: Lux
+          accuracy_decimals: 0
+      - name: "VEML770 White"
+          unit_of_measurement: raw
+          accuracy_decimals: 0
+      - name: "VEML770 ALS"
+          unit_of_measurement: raw
+          accuracy_decimals: 0
   - platform: bme280
     temperature:
       name: "Garden Temperature"
