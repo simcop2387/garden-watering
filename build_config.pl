@@ -6,6 +6,7 @@ use Path::Tiny;
 use Mojo::Template;
 use Data::Section::Simple qw/get_data_section/;
 use Time::Piece;
+use utf8;
 
 my $out_path=path("dist");
 $out_path->mkpath();
@@ -77,88 +78,15 @@ for my $file (@files) {
 __END__
 __DATA__
 @@ garden-watering.yaml
-<% my $on_boot_load_mqtt = begin %>
-<% end %>
-
-<% my $numbers = begin %>
-% for my $entry (@$entries) {
-  - platform: template
-    name: "<%= $entry->{name} %> water needed
-    id: pot_<%= $entry->{number} %>_water_needed
-    # in mL
-    min_value: 0
-    max_value: 100
-    #    set_action:
-    restore_value: false
-    initial_value: 0
-    disabled_by_default: true
-  - platform: template
-    name: "<%= $entry->{name} %> water received
-    id: pot_<%= $entry->{number} %>_water_received
-    # in mL
-    #    set_action:
-    restore_value: false
-    initial_value: 0
-    disabled_by_default: true
-% }
-<% end %>
-
-<% my $valve_states = begin %>
-% for my $entry (@$entries) {
-  - platform: template
-    name: "<%= $entry->{name} %> valve state"
-    id: pot_<%= $entry->{number} %>_valve_state
-% }
-<% end %>
-
-<% my $pot_sensor = begin %>
-% for my $entry (@$entries) {
-  - platform: cd74hc4067
-    id: adc_pot_<%= $entry->{number} %>
-    name: "<%= $entry->{name} %> soil value"
-    number: <%= $entry->{sensor} %>
-    sensor: ads1115_input
-    update_interval: 30s
-    force_update: true
-    accuracy_decimals: 5
-    unit_of_measurement: "V"
-% }
-<% end %>
-
-<% my $pot_switch = begin %>
-<% my $first = 1; %>
-<% for my $entry (@$entries) {%>
-  - platform: gpio
-    disabled_by_default: true
-    name: "<%= $entry->{name} %> valve"
-    id: pot_<%= $entry->{number} %>_valve
-    restore_mode: ALWAYS_OFF
-    <% if ($first) { %>
-    interlock: &valve_interlock [<%= join ', ', map {"pot_".$_->{number}."_valve"} @$entries %>]
-    <% $first = 0; } else { %>
-    interlock: *valve_interlock
-    <% } %>
-    on_turn_on:
-    - binary_sensor.template.publish:
-        id: pot_<%= $entry->{number} %>_valve_state
-        state: ON
-    on_turn_off:
-    - binary_sensor.template.publish:
-        id: pot_<%= $entry->{number} %>_valve_state
-        state: OFF
-    pin:
-      mcp23xxx: relay_gpio
-      number: <%= $gpio_relay_map->{$entry->{switch}} %>
-      mode:
-        output: true
-      inverted: true
-<% } %>
-<% end %>
-
 ### <%= $build_date %>
 
 esphome:
   name: garden-watering
+
+includes:
+    - veml7700_custom_sensor.h
+libraries:
+    - "https://github.com/adafruit/Adafruit_VEML7700"
 
 esp32:
   board: esp32dev
@@ -187,6 +115,14 @@ captive_portal:
 
 i2c:
 
+time:
+  - platform: homeassistant
+    timezone: "America/New_York"
+
+# close enough for me, will use for reducing watering during the night
+sun: 
+  latitude: 35.22°
+  longitude: 80.84°
 
 mcp23017:
   - id: 'relay_gpio'
@@ -206,6 +142,31 @@ cd74hc4067:
 % }
 
 sensor:
+  - platform: custom
+    lambda: |-
+    auto veml7700 = new VEML7700CustomSensor();
+    App.register_component(veml7700);
+    return {veml7700, veml7700->lux_sensor, veml7700->white_sensor, veml7700->als_sensor};
+    sensors:
+    - name: "VEML7700 Light" # Required dummy sensor
+    - name: "VEML770 Lux"
+        unit_of_measurement: Lux
+        accuracy_decimals: 0
+    - name: "VEML770 White"
+        unit_of_measurement: raw
+        accuracy_decimals: 0
+    - name: "VEML770 ALS"
+        unit_of_measurement: raw
+        accuracy_decimals: 0
+  - platform: bme280
+    temperature:
+      name: "Garden Temperature"
+    pressure:
+      name: "Garden Pressure"
+    humidity:
+      name: "Garden Humidity"
+    address: 0x77
+    update_interval: 10s
   - platform: pulse_counter
     pin: <%= $water_sensor->{pin} %>
     update_interval: <%= $water_sensor->{interval} %>
@@ -243,8 +204,18 @@ sensor:
     gain: 4.096
     multiplexer: "A3_GND"
     name: "raw adc value for multiplexer a3"
-    
-<%= $pot_sensor->() %>
+
+% for my $entry (@$entries) {
+  - platform: cd74hc4067
+    id: adc_pot_<%= $entry->{number} %>
+    name: "<%= $entry->{name} %> soil value"
+    number: <%= $entry->{sensor} %>
+    sensor: ads1115_input
+    update_interval: 30s
+    force_update: true
+    accuracy_decimals: 5
+    unit_of_measurement: "V"
+% }
 
 switch:
   - platform: gpio
@@ -257,7 +228,33 @@ switch:
       mode:
         output: true
       inverted: true
-<%= $pot_switch->() %>
+% my $first = 1;
+% for my $entry (@$entries) {
+  - platform: gpio
+    disabled_by_default: true
+    name: "<%= $entry->{name} %> valve"
+    id: pot_<%= $entry->{number} %>_valve
+    restore_mode: ALWAYS_OFF
+    <% if ($first) { %>
+    interlock: &valve_interlock [<%= join ', ', map {"pot_".$_->{number}."_valve"} @$entries %>]
+    <% $first = 0; } else { %>
+    interlock: *valve_interlock
+    <% } %>
+    on_turn_on:
+    - binary_sensor.template.publish:
+        id: pot_<%= $entry->{number} %>_valve_state
+        state: ON
+    on_turn_off:
+    - binary_sensor.template.publish:
+        id: pot_<%= $entry->{number} %>_valve_state
+        state: OFF
+    pin:
+      mcp23xxx: relay_gpio
+      number: <%= $gpio_relay_map->{$entry->{switch}} %>
+      mode:
+        output: true
+      inverted: true
+% }
 
 binary_sensor:
   - platform: gpio
@@ -282,7 +279,66 @@ binary_sensor:
         input: true
         pullup: false
 
-<%= $valve_states->() %>
+% for my $entry (@$entries) {
+  - platform: template
+    name: "<%= $entry->{name} %> valve state"
+    id: pot_<%= $entry->{number} %>_valve_state
+% }
 
 number:
-<%= $numbers->() %>
+% for my $entry (@$entries) {
+  - platform: template
+    name: "<%= $entry->{name} %> water needed"
+    id: pot_<%= $entry->{number} %>_water_needed
+    # in mL
+    min_value: 0
+    max_value: 100
+    #    set_action:
+    restore_value: false
+    initial_value: 0
+    disabled_by_default: true
+  - platform: template
+    name: "<%= $entry->{name} %> water received"
+    id: pot_<%= $entry->{number} %>_water_received
+    # in mL
+    #    set_action:
+    restore_value: false
+    initial_value: 0
+    disabled_by_default: true
+  - platform: template
+    name: "<%= $entry->{name} %> calibration max"
+    id: pot_<%= $entry->{number} %>_cal_max
+    restore_value: true
+    initial_value: 2.5
+    min_value: 0.0
+    max_value: 3.0
+    optimistic: true
+    disabled_by_default: true
+  - platform: template
+    name: "<%= $entry->{name} %> calibration min"
+    id: pot_<%= $entry->{number} %>_cal_min
+    restore_value: true
+    initial_value: 0.8
+    min_value: 0.0
+    max_value: 3.0
+    optimistic: true
+    disabled_by_default: true
+  - platform: template
+    name: "<%= $entry->{name} %> target threshold"
+    id: pot_<%= $entry->{number} %>_target
+    restore_value: true
+    min_value: 0.0
+    max_value: 3.0
+    optimistic: true
+    initial_value: 2.0 # good default?
+    disabled_by_default: true
+  - platform: template
+    name: "<%= $entry->{name} %> alert threshold"
+    id: pot_<%= $entry->{number} %>_water_received
+    restore_value: true
+    initial_value: 2.2 
+    min_value: 0.0
+    max_value: 3.0
+    optimistic: true
+    disabled_by_default: true
+% }
