@@ -299,6 +299,7 @@ number:
     initial_value: 0
     disabled_by_default: true
   - platform: template
+    # this should probably be a template sensor and not a number?
     name: "<%= $entry->{name} %> water received"
     id: pot_<%= $entry->{number} %>_water_received
     # in mL
@@ -307,6 +308,8 @@ number:
     initial_value: 0
     disabled_by_default: true
     step: 1
+    min_value: 0
+    max_value: 1000000
   - platform: template
     name: "<%= $entry->{name} %> calibration max"
     id: pot_<%= $entry->{number} %>_cal_max
