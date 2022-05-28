@@ -347,7 +347,7 @@ number:
     disabled_by_default: true
   - platform: template
     name: "<%= $entry->{name} %> alert threshold"
-    id: pot_<%= $entry->{number} %>_water_received
+    id: pot_<%= $entry->{number} %>_alert_threshold
     restore_value: true
     initial_value: 2.2 
     step: 0.001
