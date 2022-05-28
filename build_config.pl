@@ -82,11 +82,14 @@ __DATA__
 
 esphome:
   name: garden-watering
+  includes:
+    - include/veml7700_custom_sensor.h
+  libraries:
+    - Wire
+    - SPI
+    - AdaFruit/Adafruit BusIO @ 1.10.1
+    - AdaFruit VEML7700=https://github.com/adafruit/Adafruit_VEML7700
 
-includes:
-    - veml7700_custom_sensor.h
-libraries:
-    - "https://github.com/adafruit/Adafruit_VEML7700"
 
 esp32:
   board: esp32dev
