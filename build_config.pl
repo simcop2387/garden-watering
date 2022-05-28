@@ -293,6 +293,7 @@ number:
     # in mL
     min_value: 0
     max_value: 100
+    step: 1
     #    set_action:
     restore_value: false
     initial_value: 0
@@ -305,11 +306,13 @@ number:
     restore_value: false
     initial_value: 0
     disabled_by_default: true
+    step: 1
   - platform: template
     name: "<%= $entry->{name} %> calibration max"
     id: pot_<%= $entry->{number} %>_cal_max
     restore_value: true
     initial_value: 2.5
+    step: 0.0001
     min_value: 0.0
     max_value: 3.0
     optimistic: true
@@ -317,6 +320,7 @@ number:
   - platform: template
     name: "<%= $entry->{name} %> calibration min"
     id: pot_<%= $entry->{number} %>_cal_min
+    step: 0.0001
     restore_value: true
     initial_value: 0.8
     min_value: 0.0
@@ -328,6 +332,7 @@ number:
     id: pot_<%= $entry->{number} %>_target
     restore_value: true
     min_value: 0.0
+    step: 0.001
     max_value: 3.0
     optimistic: true
     initial_value: 2.0 # good default?
@@ -337,6 +342,7 @@ number:
     id: pot_<%= $entry->{number} %>_water_received
     restore_value: true
     initial_value: 2.2 
+    step: 0.001
     min_value: 0.0
     max_value: 3.0
     optimistic: true
