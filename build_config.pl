@@ -90,6 +90,10 @@ esp32:
   board: esp32dev
   framework:
     type: arduino
+    version: 2.0.2
+    source: https://github.com/espressif/arduino-esp32.git#2.0.2
+    platform_version: https://github.com/platformio/platform-espressif32.git#feature/arduino-upstream
+
 
 # Enable logging
 logger:
