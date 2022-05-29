@@ -160,15 +160,15 @@ sensor:
 #      - name: "VEML770 ALS"
 #        unit_of_measurement: raw
 #        accuracy_decimals: 0
-#  - platform: bme280
-#    temperature:
-#      name: "Garden Temperature"
-#    pressure:
-#      name: "Garden Pressure"
-#    humidity:
-#      name: "Garden Humidity"
-#    address: 0x77
-#    update_interval: 10s
+  - platform: bme280
+    temperature:
+      name: "Garden Temperature"
+    pressure:
+      name: "Garden Pressure"
+    humidity:
+      name: "Garden Humidity"
+    address: 0x77
+    update_interval: 10s
   - platform: pulse_counter
     pin: <%= $water_sensor->{pin} %>
     update_interval: <%= $water_sensor->{interval} %>
