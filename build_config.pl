@@ -82,6 +82,9 @@ __DATA__
 
 esphome:
   name: garden-watering
+  platformio_options:
+    build_flags: 
+      - -DCONFIG_ARDUINO_LOOP_STACK_SIZE=32768
 
 esp32:
   board: esp32dev
