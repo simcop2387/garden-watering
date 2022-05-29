@@ -105,7 +105,7 @@ steps:
       from_secret: ha_ssh_key
   commands:
     - mkdir /root/.ssh && echo "$${SSH_KEY}" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
-    - ssh -oStrictHostKeyChecking=no root@homeassistant.home.simcop2387.info -p 22222 'docker exec addon_a0d7b954_esphome sh -c "cd /config/esphome/; esphome compile .__garden-watering.nonyaml"'
+    - ssh -oStrictHostKeyChecking=no esphome@esphome-x86.home.simcop2387.info 'cd esphome/config; esphome compile .__garden-watering.nonyaml'
 
 - name: deploy_to_esp
   image: ssh-runner:latest
@@ -118,7 +118,7 @@ steps:
       from_secret: ha_ssh_key
   commands:
     - mkdir /root/.ssh && echo "$${SSH_KEY}" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
-    - ssh -oStrictHostKeyChecking=no root@homeassistant.home.simcop2387.info -p 22222 'docker exec addon_a0d7b954_esphome sh -c "cd /config/esphome/; curl http://192.168.1.229:9000/drone/garden-water/dist/garden-watering.yaml -o garden-watering.yaml; esphome upload --device garden-watering.local garden-watering.yaml;"'
+    - ssh -oStrictHostKeyChecking=no esphome@esphome-x86.home.simcop2387.info 'cd esphome/config; curl http://192.168.1.229:9000/drone/garden-water/dist/garden-watering.yaml -o garden-watering.yaml; esphome upload --device garden-watering.local garden-watering.yaml;'
 
 - name: discord notification
   image: appleboy/drone-discord
