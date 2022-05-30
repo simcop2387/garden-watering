@@ -85,27 +85,12 @@ steps:
     path_style: true
     endpoint: http://192.168.1.229:9000
 
-- name: push_to_homeass
-  image: ssh-runner:latest
+- name: homeass_validate
+  image: esphome/esphome:latest
   pull: if-not-exists
-  secrets: [ha_ssh_key]
-  environment: 
-    SSH_KEY:
-      from_secret: ha_ssh_key
   commands:
-    - mkdir /root/.ssh && echo "$${SSH_KEY}" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
-    - ssh -oStrictHostKeyChecking=no esphome@esphome-x86.home.simcop2387.info 'cd esphome/config; curl http://192.168.1.229:9000/drone/garden-water/dist/garden-watering.yaml -o .__garden-watering.nonyaml'
-
-- name: homeass_compile
-  image: ssh-runner:latest
-  pull: if-not-exists    
-  secrets: [ha_ssh_key]
-  environment: 
-    SSH_KEY:
-      from_secret: ha_ssh_key
-  commands:
-    - mkdir /root/.ssh && echo "$${SSH_KEY}" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
-    - ssh -oStrictHostKeyChecking=no esphome@esphome-x86.home.simcop2387.info 'cd esphome/config; esphome compile .__garden-watering.nonyaml'
+    - curl http://192.168.1.229:9000/drone/garden-water/dist/garden-watering.yaml -o .__garden-watering.nonyaml
+    - esphome compile .__garden-watering.nonyaml
 
 - name: deploy_to_esp
   image: ssh-runner:latest
