@@ -76,7 +76,7 @@ steps:
   image: registry.docker.home.simcop2387.info:443/simcop2387/esphome-local:latest
   pull: if-not-exists
   commands:
-    - curl http://192.168.1.229:9000/drone/garden-water/dist/garden-watering.tar.gz -o garden-watering.tar.gz
+    - curl http://192.168.1.229:9000/drone/garden-water/garden-watering.tar.gz -o garden-watering.tar.gz
     - tar -xvf garden-watering.tar.gz
     - ls -lah
     - >-
