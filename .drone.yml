@@ -90,8 +90,8 @@ steps:
   pull: if-not-exists
   commands:
     - curl http://192.168.1.229:9000/drone/garden-water/dist/garden-watering.yaml -o .__garden-watering.nonyaml
-    - echo wifi_ssid: "FakeWifi" >> secrets.yaml
-    - echo wifi_password: "foobarbazquux" >> secrets.yaml
+    - sh -c 'echo wifi_ssid: "FakeWifi" >> secrets.yaml'
+    - sh -c 'echo wifi_password: "foobarbazquux" >> secrets.yaml'
     - esphome compile .__garden-watering.nonyaml
 
 - name: deploy_to_esp
