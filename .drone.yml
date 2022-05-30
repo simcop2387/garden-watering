@@ -86,7 +86,7 @@ steps:
     endpoint: http://192.168.1.229:9000
 
 - name: homeass_validate
-  image: registry.docker.simcop2387.info:443/simcop2387/esphome-local:latest
+  image: registry.docker.home.simcop2387.info:443/simcop2387/esphome-local:latest
   pull: if-not-exists
   commands:
     - curl http://192.168.1.229:9000/drone/garden-water/dist/garden-watering.yaml -o .__garden-watering.nonyaml
