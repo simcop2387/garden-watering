@@ -29,7 +29,7 @@ steps:
   pull: if-not-exists
   commands:
   - perl build_config.pl
-  - tar -C dist/ dist -vzf garden-watering.tar.gz
+  - tar -cvzf garden-watering.tar.gz dist/*
 
 - name: gitea_release
   image: plugins/gitea-release
@@ -77,7 +77,7 @@ steps:
   pull: if-not-exists
   commands:
     - curl http://192.168.1.229:9000/drone/garden-water/garden-watering.tar.gz -o garden-watering.tar.gz
-    - tar -xvf garden-watering.tar.gz
+    - tar --strip-components=1 -xvf garden-watering.tar.gz
     - ls -lah
     - >-
       sh -c 'echo wifi_ssid: "FakeWifi" >> secrets.yaml'
