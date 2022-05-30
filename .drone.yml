@@ -83,7 +83,7 @@ steps:
       sh -c 'echo wifi_ssid: "FakeWifi" >> secrets.yaml'
     - >-
       sh -c 'echo wifi_password: "foobarbazquux" >> secrets.yaml'
-    - esphome compile .__garden-watering.nonyaml
+    - esphome compile garden-watering.yaml
 
 - name: deploy_to_esp
   image: ssh-runner:latest
