@@ -29,7 +29,7 @@ steps:
   pull: if-not-exists
   commands:
   - perl build_config.pl
-  - tar -c dist/* -vzf garden-watering.tar.gz
+  - tar -c dist/* -C dist/ -vzf garden-watering.tar.gz
 
 - name: gitea_release
   image: plugins/gitea-release
