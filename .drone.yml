@@ -59,19 +59,6 @@ steps:
   commands:
   - docker build -t ssh-runner:latest .
 
-- name: upload
-  image: plugins/s3
-  settings:
-    bucket: drone
-    access_key:
-      from_secret: drone_minio_user
-    secret_key:
-      from_secret: drone_minio_pass
-    source: dist/garden-watering.yaml
-    target: /garden-water/
-    path_style: true
-    endpoint: http://192.168.1.229:9000
-
 - name: upload tarball
   image: plugins/s3
   settings:
@@ -89,7 +76,9 @@ steps:
   image: registry.docker.home.simcop2387.info:443/simcop2387/esphome-local:latest
   pull: if-not-exists
   commands:
-    - curl http://192.168.1.229:9000/drone/garden-water/dist/garden-watering.yaml -o .__garden-watering.nonyaml
+    - curl http://192.168.1.229:9000/drone/garden-water/dist/garden-watering.tar.gz -o garden-watering.tar.gz
+    - tar -xvf garden-watering.tar.gz
+    - ls -lah
     - >-
       sh -c 'echo wifi_ssid: "FakeWifi" >> secrets.yaml'
     - >-
@@ -108,29 +97,6 @@ steps:
   commands:
     - mkdir /root/.ssh && echo "$${SSH_KEY}" > /root/.ssh/id_ed25519 && chmod 0600 /root/.ssh/id_ed25519
     - ssh -oStrictHostKeyChecking=no esphome@esphome-x86.home.simcop2387.info 'cd esphome/config; curl http://192.168.1.229:9000/drone/garden-water/dist/garden-watering.yaml -o garden-watering.yaml; esphome upload --device garden-watering.local garden-watering.yaml;'
-
-- name: discord notification
-  image: appleboy/drone-discord
-  settings:
-    webhook_id:
-      from_secret: discord_webhook_id
-    webhook_token:
-      from_secret: discord_webhook_token
-- name: discord notification2
-  image: appleboy/drone-discord
-  settings:
-    webhook_id:
-      from_secret: discord_webhook_id
-    webhook_token:
-      from_secret: discord_webhook_token
-    message: >
-      build \#{{build.number}})
-      {{#success build.status}}
-        succeeded. Good job.
-      {{else}}
-        failed. Fix me please.
-      {{/success}}
-
 
 volumes:
 - name: dockersock
